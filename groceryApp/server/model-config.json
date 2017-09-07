@@ -16,5 +16,9 @@
   "groceryApp": {
     "dataSource": null,
     "public": true
+  },
+  "Items": {
+    "dataSource": "db",
+    "public": true
   }
 }
