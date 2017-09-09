@@ -1,44 +1,60 @@
 <body style="text-align:center">
-  <div class="container" ng-controller="ToDoController">
-    <div class="col-xs-12 col-sm-12 col-md-offset-3 col-md-5 col-lg-offset-3 col-lg-5">
-      <h2>ToDo App</h2>
-      <!-- Form Starts Here -->
-      <div class="form">
-        <div class="input-group">
-          <input type="text" class="form-control" ng-model="task">
-          <span class="input-group-btn">
+	<div class="container" ng-controller="ToDoController">
+		<div class="col-xs-12 col-sm-12 col-md-offset-3 col-md-5 col-lg-offset-3 col-lg-5">
+			<h2>ToDo App</h2>
+			<!-- Form Starts Here -->
+			<div class="form">
+				<div class="input-group">
+					<input type="text" class="form-control" ng-model="task">
+					<span class="input-group-btn">
             <button class="btn btn-default" type="button" ng-click="addTask()"><span
               class="glyphicon glyphicon-plus"></span> Add Item</button>
-          </span>
-        </div>
-        <!-- /input-group -->
-      </div>
-      <hr/>
-      <!-- Form Ends Here -->
+					</span>
+				</div>
+			</div>
+			<hr/>
 
-      <div *ngFor="let item of items; let myIndex = index">
-        <ul class="list-group">
-          <li class="list-group-item clearfix">
-            <p class="lead"> <span class="foo" [ngStyle]='{"background-color" : item.color}'></span> {{item.name}} {{item.color}}</p>
-            <div>
-              <span class="pull-right">
-              <button class="btn btn-default btn-xs"><span class="glyphicon glyphicon-pencil" 
-                      ng-click="editTask($index)"></span></button>
-              <span *ngIf="item.bought == false; else boughtTrueIcon">
-                <button class="btn btn-primary btn-xs" (click)="item.bought = markItemBought(item.id)"><span class="glyphicon glyphicon-ok"></span></button>
-              </span>
-              <ng-template #boughtTrueIcon>
-                <button class="btn btn-primary btn-xs" (click)="item.bought = markItemBought(item.id)"><span class="glyphicon glyphicon glyphicon-minus"></span></button>
-              </ng-template>
-              <button class="btn btn-danger btn-xs"><span class="glyphicon glyphicon-remove" 
-                      ng-click="deleteTask($index)"></span></button>
-              </span>
-            </div>
-          </li>
-        </ul>
-      </div>
 
-      Total Items: {{totalCount}}
-    </div>
-  </div>
+
+			<div *ngFor="let item of items">
+				<ng-template [ngTemplateOutlet]="templateForItems" [ngOutletContext]="{item:item}"></ng-template>
+			</div>
+
+
+			<div *ngIf="itemsBought.length > 0">
+				<h3>Items bought</h3>
+				<div *ngFor="let item of itemsBought">
+					<ng-template [ngTemplateOutlet]="templateForItems" [ngOutletContext]="{item:item}"></ng-template>
+				</div>
+			</div>
+
+			Total Items: {{totalCount}}
+		</div>
+	</div>
 </body>
+
+
+
+
+<!-- Templates -->
+
+<ng-template #templateForItems let-item="item">
+	<ul class="list-group">
+		<li class="list-group-item clearfix" style="background-color: #ececec;">
+			<p class="lead"> <span class="foo" [ngStyle]='{"background-color" : item.color}'></span> {{item.name}}</p>
+			<div>
+				<span class="pull-right">
+	  <button class="btn btn-default btn-xs"><span class="glyphicon glyphicon-pencil" 
+				 ng-click="editTask($index)"></span></button>
+				<span *ngIf="item.bought == false; else boughtTrueIcon">
+			<button class="btn btn-primary btn-xs" (click)="item.bought = markItemBought(item)"><span class="glyphicon glyphicon-ok"></span></button>
+				</span>
+				<ng-template #boughtTrueIcon>
+					<button class="btn btn-primary btn-xs" (click)="item.bought = markItemBought(item)"><span class="glyphicon glyphicon glyphicon-minus"></span></button>
+				</ng-template>
+				<button class="btn btn-danger btn-xs"><span class="glyphicon glyphicon-remove"></span></button>
+				</span>
+			</div>
+		</li>
+	</ul>
+</ng-template>

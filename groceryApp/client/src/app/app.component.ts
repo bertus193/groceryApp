@@ -15,6 +15,7 @@ import { Item } from './item';
 export class AppComponent implements OnInit {
 	totalCount = "Loading...";
 	items: Item[] = [];
+	itemsBought: Item[] = [];
 
 	constructor(private itemsApi: ItemsApi) {
 		LoopBackConfig.setBaseURL("http://127.0.0.1:3000");
@@ -28,45 +29,56 @@ export class AppComponent implements OnInit {
 	}
 
 	public getItemsCount() {
-		this.itemsApi.count().
-			subscribe(
-			data => {
-				this.totalCount = "total " + data.count;
-			},
-			error => console.log("Error getItemsCount() found" + error)
-			);
+		this.itemsApi.count().subscribe(data => {
+			this.totalCount = String(data.count);
+		});
 	}
 
 	public getItems() {
-		this.itemsApi.find()
-			.subscribe((res: Item[]) => {
-				this.items = res;
-			},
-			error => console.log("Error getItemById() found" + error)
-			);
+		this.itemsApi.find().subscribe((res: Item[]) => {
+			for (let item of res) {
+				if (item.bought == false) {
+					this.items.push(item);
+				} else {
+					this.itemsBought.push(item);
+				}
+			}
+		});
 	}
 
 	public getItemById(id): Item {
 		var out = new Item();
-		this.itemsApi.findById(id)
-			.subscribe((res: Item) => {
-				out = res;
-			},
-			error => console.log("Error getItemById() found" + error)
-			);
+		this.itemsApi.findById(id).subscribe((res: Item) => {
+			out = res;
+		});
 		return out;
 	}
-	public showPopup() { console.log("dasas"); }
 
-	public markItemBought(id): boolean {
-		var item: Item = this.getItemById(id);
+	private async delay(milliseconds: number) {
+		return new Promise<void>(resolve => {
+			setTimeout(resolve, milliseconds);
+		});
+	}
+
+	public markItemBought(item: Item): boolean {
+		var inBool = item.bought;
 		var out = item.bought;
-		if (out == false) {
+		if (inBool == false) {
 			out = true;
 		} else {
 			out = false;
 		}
-		console.log(out);
+		item.bought = out;
+		this.itemsApi.updateAttributes(item.id, item).subscribe(success => {
+			if (inBool == false) {
+				this.items.splice(this.items.indexOf(item, 0), 1);
+				this.itemsBought.push(item);
+			} else {
+				this.itemsBought.splice(this.itemsBought.indexOf(item, 0), 1);
+				this.items.push(item);
+			}
+
+		});
 		return out;
 	}
 
