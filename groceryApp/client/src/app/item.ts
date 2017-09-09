@@ -1,11 +1,3 @@
-interface IItem {
-    id: string;
-    name: string;
-    color: string;
-    bought: boolean;
-    price: number;
-}
-
 export class Item {
     id: string;
     name: string;
@@ -13,11 +5,10 @@ export class Item {
     bought: boolean;
     price: number;
 
-    public constructor(obj?: IItem) {
-        this.id = obj && obj.id || "";
-        this.name = obj && obj.name || "";
-        this.color = obj && obj.color || "";
-        this.bought = obj && obj.bought || false;
-        this.price = obj && obj.price || 0;
+    public constructor(name: string, color?: string, bought?: boolean, price?: number) {
+        this.name = name || "";
+        this.color = color || "#ffffff";
+        this.bought = bought || false;
+        this.price = price || 0;
     }
 }

@@ -5,11 +5,12 @@
 			<!-- Form Starts Here -->
 			<div class="form">
 				<div class="input-group">
-					<input type="text" class="form-control" ng-model="task">
+					<input type="text" class="form-control" [(ngModel)]="itemName">
 					<span class="input-group-btn">
-            <button class="btn btn-default" type="button" ng-click="addTask()"><span
-              class="glyphicon glyphicon-plus"></span> Add Item</button>
+					<button class="btn btn-default" type="button" (click)="addItem(itemName)">
+						<span class="glyphicon glyphicon-plus" ></span> Add Item</button>
 					</span>
+					<!---->
 				</div>
 			</div>
 			<hr/>

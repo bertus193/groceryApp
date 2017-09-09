@@ -58,17 +58,11 @@ export class AppComponent implements OnInit {
 	}
 
 	public getItemById(id): Item {
-		var out = new Item();
+		var out = new Item("");
 		this.itemsApi.findById(id).subscribe((res: Item) => {
 			out = res;
 		});
 		return out;
-	}
-
-	private async delay(milliseconds: number) {
-		return new Promise<void>(resolve => {
-			setTimeout(resolve, milliseconds);
-		});
 	}
 
 	public markItemBought(item: Item): boolean {
@@ -91,6 +85,13 @@ export class AppComponent implements OnInit {
 
 		});
 		return out;
+	}
+
+	public addItem(name: string) {
+		let item = new Item(name);
+		this.itemsApi.create(item).subscribe((res: Item) => {
+			this.items.push(res);
+		});
 	}
 
 }
