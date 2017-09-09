@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 
 import { LoopBackConfig } from './sdk';
 import { Items } from './sdk/models';
@@ -11,21 +11,26 @@ import { ItemsApi } from './sdk/services';
   styleUrls: ['./app.component.css']
 })
 
-export class AppComponent {
+export class AppComponent implements OnInit {
+  title = "Cargando...";
+
   constructor(private items: ItemsApi) {
-    LoopBackConfig.setBaseURL("127.0.0.1:3000");
+    LoopBackConfig.setBaseURL("http://127.0.0.1:3000");
     LoopBackConfig.setApiVersion("api");
   }
 
-  private getItems(): String {
-    let itemCount;
-
-    this.items.count().subscribe(data => {
-      itemCount = data;
-      console.log(itemCount);
-    });
-    return "salida" + this.items.count();
+  ngOnInit() {
+    this.getItems();
   }
 
-  title = this.getItems();
+
+  private getItems() {
+    this.items.count().
+      subscribe(
+      data => {
+        this.title = "total " + data.count;
+      },
+      error => console.log("Error getItems() found")
+      );
+  }
 }
