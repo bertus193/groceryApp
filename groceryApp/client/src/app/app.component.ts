@@ -14,6 +14,7 @@ import { Item } from './item';
 
 export class AppComponent implements OnInit {
 	totalCount = "Loading...";
+	totalPrice: number;
 	items: Item[] = [];
 	itemsBought: Item[] = [];
 
@@ -24,6 +25,7 @@ export class AppComponent implements OnInit {
 
 	ngOnInit() {
 		this.getItemsCount();
+		this.getItemsPriceTotal();
 		//this.getItemById("59b1979ee9d20e1def531938");
 		this.getItems();
 	}
@@ -31,6 +33,15 @@ export class AppComponent implements OnInit {
 	public getItemsCount() {
 		this.itemsApi.count().subscribe(data => {
 			this.totalCount = String(data.count);
+		});
+	}
+
+	public getItemsPriceTotal() {
+		this.totalPrice = 0;
+		this.itemsApi.find().subscribe((res: Item[]) => {
+			for (let item of res) {
+				this.totalPrice += item.price;
+			}
 		});
 	}
 

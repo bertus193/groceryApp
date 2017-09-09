@@ -41,6 +41,10 @@ export class Items implements ItemsInterface {
       plural: 'Items',
       path: 'Items',
       properties: {
+        "id": {
+          name: 'id',
+          type: 'any'
+        },
         "name": {
           name: 'name',
           type: 'string'
@@ -53,9 +57,9 @@ export class Items implements ItemsInterface {
           name: 'color',
           type: 'string'
         },
-        "id": {
-          name: 'id',
-          type: 'any'
+        "price": {
+          name: 'price',
+          type: 'number'
         },
       },
       relations: {

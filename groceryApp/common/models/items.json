@@ -17,6 +17,10 @@
     "color": {
       "type": "string",
       "default": "#ffffff"
+    },
+    "price": {
+      "type": "number",
+      "default": 0
     }
   },
   "validations": [],
