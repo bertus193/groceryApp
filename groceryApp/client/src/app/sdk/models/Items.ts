@@ -25,7 +25,7 @@ export class Items implements ItemsInterface {
   * @license MIT
   * This method creates an instance of Items for dynamic purposes.
   **/
-  public static factory(data: ItemsInterface): Items{
+  public static factory(data: ItemsInterface): Items {
     return new Items(data);
   }
   /**
@@ -43,6 +43,14 @@ export class Items implements ItemsInterface {
       properties: {
         "name": {
           name: 'name',
+          type: 'string'
+        },
+        "bought": {
+          name: 'bought',
+          type: 'boolean'
+        },
+        "color": {
+          name: 'color',
           type: 'string'
         },
         "id": {

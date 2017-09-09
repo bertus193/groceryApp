@@ -17,17 +17,19 @@
       <!-- Form Ends Here -->
 
       <div *ngFor="let item of items; let myIndex = index">
-        <ul class="list-group" ng-show="tasks.length > 0">
-          <li class="list-group-item clearfix task" ng-repeat="todo in tasks" ng-class="{disabled: todo.done}">
-            <p class="lead">{{item.name}}</p>
+        <ul class="list-group">
+          <li class="list-group-item clearfix">
+            <p class="lead"> <span class="foo" [ngStyle]='{"background-color" : item.color}'></span> {{item.name}} {{item.color}}</p>
             <div>
               <span class="pull-right">
-                    <button class="btn btn-default btn-xs"><span class="glyphicon glyphicon-pencil" 
+              <button class="btn btn-default btn-xs"><span class="glyphicon glyphicon-pencil" 
                       ng-click="editTask($index)"></span></button>
-              <button class="btn btn-primary btn-xs" ng-show="!todo.done"><span class="glyphicon glyphicon-ok" 
-                      ng-click="doneTask($index)"></span></button>
-              <!--<button class="btn btn-primary btn-xs" ng-show="todo.done"><span class="glyphicon glyphicon glyphicon-minus" 
-                      ng-click="unDoneTask($index)"></span></button>-->
+              <span *ngIf="item.bought == false; else boughtTrueIcon">
+                <button class="btn btn-primary btn-xs" (click)="item.bought = markItemBought(item.id)"><span class="glyphicon glyphicon-ok"></span></button>
+              </span>
+              <ng-template #boughtTrueIcon>
+                <button class="btn btn-primary btn-xs" (click)="item.bought = markItemBought(item.id)"><span class="glyphicon glyphicon glyphicon-minus"></span></button>
+              </ng-template>
               <button class="btn btn-danger btn-xs"><span class="glyphicon glyphicon-remove" 
                       ng-click="deleteTask($index)"></span></button>
               </span>

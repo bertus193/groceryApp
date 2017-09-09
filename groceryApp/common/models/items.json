@@ -9,6 +9,14 @@
     "name": {
       "type": "string",
       "required": true
+    },
+    "bought": {
+      "type": "boolean",
+      "default": false
+    },
+    "color": {
+      "type": "string",
+      "default": "#ffffff"
     }
   },
   "validations": [],

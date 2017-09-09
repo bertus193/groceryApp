@@ -27,7 +27,7 @@ export class AppComponent implements OnInit {
 		this.getItems();
 	}
 
-	private getItemsCount() {
+	public getItemsCount() {
 		this.itemsApi.count().
 			subscribe(
 			data => {
@@ -37,7 +37,7 @@ export class AppComponent implements OnInit {
 			);
 	}
 
-	private getItems() {
+	public getItems() {
 		this.itemsApi.find()
 			.subscribe((res: Item[]) => {
 				this.items = res;
@@ -46,7 +46,7 @@ export class AppComponent implements OnInit {
 			);
 	}
 
-	private getItemById(id): Item {
+	public getItemById(id): Item {
 		var out = new Item();
 		this.itemsApi.findById(id)
 			.subscribe((res: Item) => {
@@ -54,6 +54,19 @@ export class AppComponent implements OnInit {
 			},
 			error => console.log("Error getItemById() found" + error)
 			);
+		return out;
+	}
+	public showPopup() { console.log("dasas"); }
+
+	public markItemBought(id): boolean {
+		var item: Item = this.getItemById(id);
+		var out = item.bought;
+		if (out == false) {
+			out = true;
+		} else {
+			out = false;
+		}
+		console.log(out);
 		return out;
 	}
 
