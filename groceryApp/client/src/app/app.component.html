@@ -8,7 +8,7 @@
           <input type="text" class="form-control" ng-model="task">
           <span class="input-group-btn">
             <button class="btn btn-default" type="button" ng-click="addTask()"><span
-              class="glyphicon glyphicon-plus"></span> Add Task</button>
+              class="glyphicon glyphicon-plus"></span> Add Item</button>
           </span>
         </div>
         <!-- /input-group -->
@@ -26,8 +26,8 @@
                       ng-click="editTask($index)"></span></button>
               <button class="btn btn-primary btn-xs" ng-show="!todo.done"><span class="glyphicon glyphicon-ok" 
                       ng-click="doneTask($index)"></span></button>
-              <button class="btn btn-primary btn-xs" ng-show="todo.done"><span class="glyphicon glyphicon-repeat" 
-                      ng-click="unDoneTask($index)"></span></button>
+              <!--<button class="btn btn-primary btn-xs" ng-show="todo.done"><span class="glyphicon glyphicon glyphicon-minus" 
+                      ng-click="unDoneTask($index)"></span></button>-->
               <button class="btn btn-danger btn-xs"><span class="glyphicon glyphicon-remove" 
                       ng-click="deleteTask($index)"></span></button>
               </span>

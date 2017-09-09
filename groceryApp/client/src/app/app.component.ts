@@ -23,28 +23,38 @@ export class AppComponent implements OnInit {
 
 	ngOnInit() {
 		this.getItemsCount();
-		this.getItemById("59b1979ee9d20e1def531938");
+		//this.getItemById("59b1979ee9d20e1def531938");
+		this.getItems();
 	}
 
 	private getItemsCount() {
 		this.itemsApi.count().
 			subscribe(
 			data => {
-				console.log(data);
 				this.totalCount = "total " + data.count;
 			},
-			error => console.log("Error getItems() found")
+			error => console.log("Error getItemsCount() found" + error)
 			);
 	}
 
-	private getItemById(id) {
-		this.itemsApi.findById(id)
-			.subscribe((res: Item) => {
-				console.log(res.name);
-				this.items.push(res);
-				//this.items = "total " + data;
+	private getItems() {
+		this.itemsApi.find()
+			.subscribe((res: Item[]) => {
+				this.items = res;
 			},
 			error => console.log("Error getItemById() found" + error)
 			);
 	}
+
+	private getItemById(id): Item {
+		var out = new Item();
+		this.itemsApi.findById(id)
+			.subscribe((res: Item) => {
+				out = res;
+			},
+			error => console.log("Error getItemById() found" + error)
+			);
+		return out;
+	}
+
 }
