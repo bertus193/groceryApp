@@ -60,10 +60,10 @@ import { ItemsApi } from './services/custom/Items';
 *  3.- Progressive applications (Angular Mobile, Ionic, WebViews, etc)
 **/
 @NgModule({
-  imports:      [ CommonModule, HttpModule ],
-  declarations: [ ],
-  exports:      [ ],
-  providers:    [
+  imports: [CommonModule, HttpModule],
+  declarations: [],
+  exports: [],
+  providers: [
     ErrorHandler,
     SocketConnection
   ]
@@ -74,8 +74,8 @@ export class SDKBrowserModule {
     useClass: CookieBrowser
   }): ModuleWithProviders {
     return {
-      ngModule  : SDKBrowserModule,
-      providers : [
+      ngModule: SDKBrowserModule,
+      providers: [
         LoopBackAuth,
         LoggerService,
         JSONSearchParams,

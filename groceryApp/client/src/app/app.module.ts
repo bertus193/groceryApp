@@ -4,13 +4,14 @@ import { HttpModule } from '@angular/http';
 import { SDKBrowserModule } from './sdk/index';
 
 import { AppComponent } from './app.component';
+import { AlertModule } from 'ngx-bootstrap';
 
 @NgModule({
   declarations: [
     AppComponent
   ],
   imports: [
-    BrowserModule, HttpModule, SDKBrowserModule.forRoot(),
+    BrowserModule, HttpModule, SDKBrowserModule.forRoot(), AlertModule.forRoot()
   ],
   providers: [],
   bootstrap: [AppComponent]
