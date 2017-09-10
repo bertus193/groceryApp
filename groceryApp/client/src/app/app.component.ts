@@ -48,10 +48,11 @@ export class AppComponent implements OnInit {
 	public getItems() {
 		this.itemsApi.find().subscribe((res: Item[]) => {
 			for (let item of res) {
+				var itemBox = new ItemBox(item);
 				if (item.bought == false) {
-					this.itemBoxes.push(new ItemBox(item));
+					this.itemBoxes.push(itemBox);
 				} else {
-					this.itemBoxesBought.push(new ItemBox(item));
+					this.itemBoxesBought.push(itemBox);
 				}
 			}
 		});
@@ -87,12 +88,19 @@ export class AppComponent implements OnInit {
 	public addItem(name: string) {
 		let item = new Item(name);
 		this.itemsApi.create(item).subscribe((res: Item) => {
-			this.itemBoxes.push(new ItemBox(item));
+			var itemBox = new ItemBox(res);
+			this.itemBoxes.push(itemBox);
 		});
 	}
 
-	public deleteItem(item: Item) {
-		console.log("deleteItem " + item.name);
+	public deleteItem(itemBox: ItemBox) {
+		this.itemsApi.deleteById(itemBox.item.id).subscribe(res => {
+			if (itemBox.item.bought == false) {
+				this.itemBoxes.splice(this.itemBoxes.indexOf(itemBox, 0), 1);
+			} else {
+				this.itemBoxesBought.splice(this.itemBoxesBought.indexOf(itemBox, 0), 1);
+			}
+		});
 	}
 
 	public editBoxContent(itemBox: ItemBox) {
@@ -126,7 +134,7 @@ export class AppComponent implements OnInit {
 		priceBox.innerHTML = priceBox.querySelector("input").value + " $";
 
 		deleteBox.innerHTML = '<button class="btn btn-danger btn-xs"><span class="glyphicon glyphicon-remove"></span></button>';
-		deleteBox.querySelector('button').addEventListener('click', (event) => this.deleteItem(itemBox.item));
+		deleteBox.querySelector('button').addEventListener('click', (event) => this.deleteItem(itemBox));
 
 		if (itemBox.item.bought == false) {
 			markBoughtBox.innerHTML = '<button class="btn btn-primary btn-xs"><span class="glyphicon glyphicon-ok"></span></button>';

@@ -76,7 +76,7 @@
 		</ng-template>
 		</span>
 		<span [id]="itemBox.item.id + '_delete'">
-			<button class="btn btn-danger btn-xs"><span class="glyphicon glyphicon-remove"></span></button>
+			<button class="btn btn-danger btn-xs" (click)="deleteItem(itemBox)"><span class="glyphicon glyphicon-remove"></span></button>
 		</span>
 		</span>
 	</div>
