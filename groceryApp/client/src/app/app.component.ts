@@ -14,7 +14,7 @@ import { ItemBox } from './itemBox';
 })
 
 export class AppComponent implements OnInit {
-	totalCount = "Loading...";
+	totalCount = "-";
 	totalPrice: number;
 	itemBoxes: ItemBox[] = [];
 	itemBoxesBought: ItemBox[] = [];
@@ -24,15 +24,17 @@ export class AppComponent implements OnInit {
 		LoopBackConfig.setApiVersion("api");
 	}
 
+
 	ngOnInit() {
 		this.getItemsCount();
 		this.getItemsPriceTotal();
 		this.getItems();
 	}
-
 	public getItemsCount() {
 		this.itemsApi.count().subscribe(data => {
 			this.totalCount = String(data.count);
+		}, (error) => {
+			this.handleError(error)
 		});
 	}
 
@@ -42,10 +44,13 @@ export class AppComponent implements OnInit {
 			for (let item of res) {
 				this.totalPrice += item.price;
 			}
+		}, (error) => {
+			this.handleError(error)
 		});
 	}
 
 	public getItems() {
+		var count = 0;
 		this.itemsApi.find().subscribe((res: Item[]) => {
 			for (let item of res) {
 				var itemBox = new ItemBox(item);
@@ -55,6 +60,8 @@ export class AppComponent implements OnInit {
 					this.itemBoxesBought.push(itemBox);
 				}
 			}
+		}, (error) => {
+			this.handleError(error)
 		});
 	}
 
@@ -62,6 +69,8 @@ export class AppComponent implements OnInit {
 		var out = new Item("");
 		this.itemsApi.findById(id).subscribe((res: Item) => {
 			out = res;
+		}, (error) => {
+			this.handleError(error)
 		});
 		return out;
 	}
@@ -80,7 +89,8 @@ export class AppComponent implements OnInit {
 				this.itemBoxesBought.splice(this.itemBoxesBought.indexOf(currentItemBox, 0), 1);
 				this.itemBoxes.push(currentItemBox);
 			}
-
+		}, (error) => {
+			this.handleError(error)
 		});
 		return out;
 	}
@@ -91,11 +101,15 @@ export class AppComponent implements OnInit {
 			var itemBox = new ItemBox(res);
 			this.itemBoxes.push(itemBox);
 			this.getItemsPriceTotal();
+		}, (error) => {
+			this.handleError(error)
 		});
 	}
 
 	public updateItem(itemBox: ItemBox) {
 		this.itemsApi.updateAttributes(itemBox.item.id, itemBox.item).subscribe((res: Item) => {
+		}, (error) => {
+			this.handleError(error)
 		})
 
 		this.editBoxContentFinish(itemBox)
@@ -109,6 +123,8 @@ export class AppComponent implements OnInit {
 				this.itemBoxesBought.splice(this.itemBoxesBought.indexOf(itemBox, 0), 1);
 			}
 			this.getItemsPriceTotal();
+		}, (error) => {
+			console.log(error.name)
 		});
 	}
 
@@ -127,16 +143,16 @@ export class AppComponent implements OnInit {
 			if (!isNaN(newPriceNumber)) {
 				itemBox.item.price = newPriceNumber;
 			}
-
 			this.updateItem(itemBox)
+
 		})
 
 		editCancelBox.innerHTML = '<button class="btn btn-danger btn-xs">Cancel</button>';
 		editCancelBox.querySelector('button').addEventListener('click', (event) => this.editBoxContentFinish(itemBox));
 
 		var name = itemBox.item.name.replace(" ", "&nbsp;")
-		nameBox.innerHTML = '<input type="text" style="height: 26px;border-radius: 3px;border-style: solid;border-color: #8d8d8d;border-width: 1px;" value=' + name + '></input>';
-		priceBox.innerHTML = '<input type="text" style="width: 60px;height: 26px;border-radius: 3px;border-style: solid;border-color: #8d8d8d;border-width: 1px;" value=' + itemBox.item.price + '></input> $';
+		nameBox.innerHTML = ' <input type="text" style="padding: 3px;border-radius: .25rem;height: 26px;border: 1px solid rgba(0,0,0,.15);border-style: solid;color: #464a4c;" value=' + name + '></input>';
+		priceBox.innerHTML = '<input type="text" style="padding: 3px;border-radius: .25rem;height: 26px;border: 1px solid rgba(0,0,0,.15);border-style: solid;color: #464a4c;width: 60px;" value=' + itemBox.item.price + '></input> $';
 
 		itemBox.editFunctionNameButton = 'editBoxContentFinish'
 	}
@@ -168,6 +184,39 @@ export class AppComponent implements OnInit {
 		itemBox.editFunctionNameButton = 'editBoxContent'
 	}
 
+	public handleError(error) {
+		var errorMessage = error.message
+		if (errorMessage == "MongoDB connection is not established") {
+			this.newAlert(error.message);
+		} else if (error == "Server error") {
+			this.newAlert("Server connection is not established");
+		} else {
+			console.log("Error: " + error)
+		}
+	}
 
+	public closeAlert() {
+		let messageAlert = document.getElementById("appAlerts");
+		messageAlert.innerHTML = "";
+	}
 
+	public newAlert(message: string, type?: number) {
+		var htmlMessage = "";
+		let messageAlert = document.getElementById("appAlerts");
+		messageAlert.innerHTML = '<div class="alert alert-danger" role="alert"><button class="close"><span>&times;</span></button><span id="appAlertsMessage"><strong>Error:</strong> Error found.</span></div>';
+		messageAlert.querySelector('button').addEventListener('click', (event) => this.closeAlert());
+		let messageAlertMessage = document.getElementById("appAlertsMessage");
+		switch (type) {
+			case 2:
+				htmlMessage += "<strong>Success:</strong> "
+				messageAlert.querySelector('div').className = "alert alert-success"
+				break
+			default:
+				htmlMessage += "<strong>Error:</strong> "
+				break
+		}
+		htmlMessage += message
+
+		messageAlertMessage.innerHTML = htmlMessage;
+	}
 }
