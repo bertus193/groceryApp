@@ -74,10 +74,10 @@ export class AppComponent implements OnInit {
 		this.itemBoxes = [];
 		this.itemBoxesBought = [];
 		this.itemsApi.find().subscribe((res: Item[]) => {
-			for (let item of res) {
-				if (item.available == true) {
-					var itemBox = new ItemBox(item)
-					if (item.bought == false) {
+			for (var i = res.length - 1; i >= 0; i--) {
+				if (res[i].available == true) {
+					var itemBox = new ItemBox(res[i])
+					if (res[i].bought == false) {
 						this.itemBoxes.push(itemBox)
 					} else {
 						this.itemBoxesBought.push(itemBox)
@@ -123,10 +123,10 @@ export class AppComponent implements OnInit {
 		this.itemsApi.updateAttributes(currentItemBox.item.id, currentItemBox.item).subscribe(success => {
 			if (inBool == false) {
 				this.itemBoxes.splice(this.itemBoxes.indexOf(currentItemBox, 0), 1)
-				this.itemBoxesBought.push(currentItemBox)
+				this.itemBoxesBought.unshift(currentItemBox)
 			} else {
 				this.itemBoxesBought.splice(this.itemBoxesBought.indexOf(currentItemBox, 0), 1)
-				this.itemBoxes.push(currentItemBox)
+				this.itemBoxes.unshift(currentItemBox)
 			}
 		}, (error) => {
 			this.handleError(error)
@@ -140,7 +140,7 @@ export class AppComponent implements OnInit {
 
 		this.itemsApi.create(item).subscribe((res: Item) => {
 			var itemBox = new ItemBox(res)
-			this.itemBoxes.push(itemBox)
+			this.itemBoxes.unshift(itemBox)
 			this.getItemsCount()
 			this.getItemsPriceTotal()
 			this.getAutocompleteItems()

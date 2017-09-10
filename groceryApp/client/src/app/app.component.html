@@ -13,12 +13,14 @@
 					<!---->
 				</div>
 			</div>
-			<div style="padding-top: 10px;">
-				<div class="topContainer">
-					<div style="color:#565656">Add autocompleted Items</div>
-					<span *ngFor="let item of autocompleteItems">
+			<div *ngIf="autocompleteItems.length > 0">
+				<div style="padding-top: 10px;">
+					<div class="topContainer">
+						<div style="color:#565656">Add autocompleted Items</div>
+						<span *ngFor="let item of autocompleteItems">
 					<button _ngcontent-c0="" (click)="addItem(item.name, item.price)" class="btn btn-default btn-xs">{{item.name}}</button>
 				</span>
+					</div>
 				</div>
 			</div>
 
