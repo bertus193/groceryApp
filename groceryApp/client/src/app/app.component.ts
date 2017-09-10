@@ -16,8 +16,9 @@ import { ItemBox } from './itemBox'
 export class AppComponent implements OnInit {
 	totalCount = "-"
 	totalPrice: number
-	itemBoxes: ItemBox[] = []
-	itemBoxesBought: ItemBox[] = []
+	itemBoxes: ItemBox[];
+	itemBoxesBought: ItemBox[];
+	autocompleteItems: Item[];
 
 	constructor(private itemsApi: ItemsApi) {
 		LoopBackConfig.setBaseURL("http://127.0.0.1:3000")
@@ -26,39 +27,77 @@ export class AppComponent implements OnInit {
 
 
 	ngOnInit() {
-		this.getItemsCount()
-		this.getItemsPriceTotal()
+
+
 		this.getItems()
+		this.getItemsPriceTotal()
+		this.getItemsCount()
+		this.getAutocompleteItems()
 	}
+
 	public getItemsCount() {
-		this.itemsApi.count().subscribe(data => {
+		var out = 0;
+		for (let i = 0; i < this.itemBoxes.length; i++) {
+			if (this.itemBoxes[i].item.available == true) {
+				out++;
+			}
+		}
+		for (let i = 0; i < this.itemBoxesBought.length; i++) {
+			if (this.itemBoxesBought[i].item.available == true) {
+				out++;
+			}
+		}
+		this.totalCount = String(out);
+		/*this.itemsApi.count().subscribe(data => {
 			this.totalCount = String(data.count)
 		}, (error) => {
 			this.handleError(error)
-		})
+		})*/
 	}
 
 	public getItemsPriceTotal() {
-		this.totalPrice = 0
+		var out = 0;
+		for (let i = 0; i < this.itemBoxes.length; i++) {
+			if (this.itemBoxes[i].item.available == true) {
+				out += this.itemBoxes[i].item.price;
+			}
+		}
+		for (let i = 0; i < this.itemBoxesBought.length; i++) {
+			if (this.itemBoxesBought[i].item.available == true) {
+				out += this.itemBoxesBought[i].item.price;
+			}
+		}
+		this.totalPrice = out;
+	}
+
+	public getItems() {
+		this.itemBoxes = [];
+		this.itemBoxesBought = [];
 		this.itemsApi.find().subscribe((res: Item[]) => {
 			for (let item of res) {
-				this.totalPrice += item.price
+				if (item.available == true) {
+					var itemBox = new ItemBox(item)
+					if (item.bought == false) {
+						this.itemBoxes.push(itemBox)
+					} else {
+						this.itemBoxesBought.push(itemBox)
+					}
+				}
 			}
 		}, (error) => {
 			this.handleError(error)
 		})
 	}
 
-	public getItems() {
+	public getAutocompleteItems() {
 		var count = 0
+		this.autocompleteItems = [];
 		this.itemsApi.find().subscribe((res: Item[]) => {
-			for (let item of res) {
-				var itemBox = new ItemBox(item)
-				if (item.bought == false) {
-					this.itemBoxes.push(itemBox)
-				} else {
-					this.itemBoxesBought.push(itemBox)
+			for (var i = res.length - 1; i >= 0; i--) {
+				if (count < 8) {
+					this.autocompleteItems.push(res[i])
 				}
+				count++
 			}
 		}, (error) => {
 			this.handleError(error)
@@ -95,13 +134,16 @@ export class AppComponent implements OnInit {
 		return out
 	}
 
-	public addItem(name: string) {
+	public addItem(name: string, price?: number) {
 		let item = new Item(name)
+		if (price) { item = new Item(name, price) }
+
 		this.itemsApi.create(item).subscribe((res: Item) => {
 			var itemBox = new ItemBox(res)
 			this.itemBoxes.push(itemBox)
 			this.getItemsCount()
 			this.getItemsPriceTotal()
+			this.getAutocompleteItems()
 		}, (error) => {
 			this.handleError(error)
 		})
@@ -117,31 +159,33 @@ export class AppComponent implements OnInit {
 	}
 
 	public deleteItem(itemBox: ItemBox) {
-		this.itemsApi.deleteById(itemBox.item.id).subscribe(res => {
-			if (itemBox.item.bought == false) {
-				this.itemBoxes.splice(this.itemBoxes.indexOf(itemBox, 0), 1)
-			} else {
-				this.itemBoxesBought.splice(this.itemBoxesBought.indexOf(itemBox, 0), 1)
-			}
-			this.getItemsCount()
-			this.getItemsPriceTotal()
-		}, (error) => {
-			console.log(error.name)
-		})
+		itemBox.item.available = false
+		this.updateItem(itemBox)
+		this.getItemsCount()
+		this.getItemsPriceTotal()
+		if (itemBox.item.bought == false) {
+			this.itemBoxes.splice(this.itemBoxes.indexOf(itemBox, 0), 1)
+		} else {
+			this.itemBoxesBought.splice(this.itemBoxesBought.indexOf(itemBox, 0), 1)
+		}
+		this.getItemsCount()
+		this.getItemsPriceTotal()
+		//this.itemsApi.deleteById(itemBox.item.id).subscribe(res => {})
 	}
 
 	public deleteAllItems() {
 		for (let i = 0; i < this.itemBoxes.length; i++) {
-			console.log(this.itemBoxes[i].item.id)
-			this.itemsApi.deleteById(this.itemBoxes[i].item.id).subscribe(res => {
-			})
+			this.itemBoxes[i].item.available = false
+			this.updateItem(this.itemBoxes[i])
+			//this.itemsApi.deleteById(this.itemBoxes[i].item.id).subscribe(res => {})
 		}
 		for (let i = 0; i < this.itemBoxesBought.length; i++) {
-			this.itemsApi.deleteById(this.itemBoxesBought[i].item.id).subscribe(res => {
-			})
+			this.itemBoxesBought[i].item.available = false
+			this.updateItem(this.itemBoxesBought[i])
+			//this.itemsApi.deleteById(this.itemBoxesBought[i].item.id).subscribe(res => {})
 		}
-		this.itemBoxes = []
-		this.itemBoxesBought = []
+		this.itemBoxes = [];
+		this.itemBoxesBought = [];
 		this.getItemsCount()
 		this.getItemsPriceTotal()
 		this.newAlert("All items have been deleted", 2)

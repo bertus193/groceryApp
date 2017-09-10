@@ -61,6 +61,10 @@ export class Items implements ItemsInterface {
           name: 'price',
           type: 'number'
         },
+        "available": {
+          name: 'available',
+          type: 'boolean'
+        }
       },
       relations: {
       }

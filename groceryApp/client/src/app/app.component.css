@@ -5,3 +5,10 @@
     margin: 5px;
     border-radius: 15px;
 }
+
+.topContainer{
+  padding: 15px;
+  color: inherit;
+  background-color: #EEEEEE;
+  border-radius: 6px;
+}

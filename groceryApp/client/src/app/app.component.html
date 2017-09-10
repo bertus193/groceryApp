@@ -13,6 +13,15 @@
 					<!---->
 				</div>
 			</div>
+			<div style="padding-top: 10px;">
+				<div class="topContainer">
+					<div style="color:#565656">Add autocompleted Items</div>
+					<span *ngFor="let item of autocompleteItems">
+					<button _ngcontent-c0="" (click)="addItem(item.name, item.price)" class="btn btn-default btn-xs">{{item.name}}</button>
+				</span>
+				</div>
+			</div>
+
 			<hr/>
 			<div id="appAlerts">
 
@@ -54,8 +63,12 @@
 	<!--<span class="foo" [ngStyle]='{"background-color" : itemBox.item.color}'></span>-->
 	<div style="height: 26px;">
 
+		<span *ngIf="itemBox.item.bought == false; else boughtName">
 		<span [id]="itemBox.item.id + '_name'">{{itemBox.item.name}}</span>
-
+		</span>
+		<ng-template #boughtName>
+			<span [id]="itemBox.item.id + '_name'" style="text-decoration: line-through;">{{itemBox.item.name}}</span>
+		</ng-template>
 		<span style="float: right;" [id]="itemBox.item.id + '_price'">
 			{{itemBox.item.price}} $
 		</span>

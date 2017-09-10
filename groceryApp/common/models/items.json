@@ -21,6 +21,10 @@
     "price": {
       "type": "number",
       "default": 0
+    },
+    "available": {
+      "type": "boolean",
+      "default": true
     }
   },
   "validations": [],
