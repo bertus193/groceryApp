@@ -90,6 +90,7 @@ export class AppComponent implements OnInit {
 		this.itemsApi.create(item).subscribe((res: Item) => {
 			var itemBox = new ItemBox(res);
 			this.itemBoxes.push(itemBox);
+			this.getItemsPriceTotal();
 		});
 	}
 
@@ -100,6 +101,7 @@ export class AppComponent implements OnInit {
 			} else {
 				this.itemBoxesBought.splice(this.itemBoxesBought.indexOf(itemBox, 0), 1);
 			}
+			this.getItemsPriceTotal();
 		});
 	}
 

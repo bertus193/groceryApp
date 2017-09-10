@@ -6,9 +6,9 @@ export class Item {
     price: number;
 
     public constructor(name: string, color?: string, bought?: boolean, price?: number) {
-        this.name = name || "";
-        this.color = color || "#ffffff";
-        this.bought = bought || false;
-        this.price = price || 0;
+        this.name = name || ""
+        this.color = color || "#ffffff"
+        this.bought = bought || false
+        this.price = price || Math.floor(Math.random() * 201)
     }
 }
