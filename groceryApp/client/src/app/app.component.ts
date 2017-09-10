@@ -48,11 +48,6 @@ export class AppComponent implements OnInit {
 			}
 		}
 		this.totalCount = String(out);
-		/*this.itemsApi.count().subscribe(data => {
-			this.totalCount = String(data.count)
-		}, (error) => {
-			this.handleError(error)
-		})*/
 	}
 
 	public getItemsPriceTotal() {
@@ -213,9 +208,10 @@ export class AppComponent implements OnInit {
 		editCancelBox.innerHTML = '<button class="btn btn-danger btn-xs">Cancel</button>'
 		editCancelBox.querySelector('button').addEventListener('click', (event) => this.editBoxContentFinish(itemBox))
 
-		var name = itemBox.item.name.replace(" ", "&nbsp")
-		nameBox.innerHTML = ' <input type="text" style="padding: 3pxborder-radius: .25remheight: 26pxborder: 1px solid rgba(0,0,0,.15)border-style: solidcolor: #464a4c" value=' + name + '></input>'
-		priceBox.innerHTML = '<input type="text" style="padding: 3pxborder-radius: .25remheight: 26pxborder: 1px solid rgba(0,0,0,.15)border-style: solidcolor: #464a4cwidth: 60px" value=' + itemBox.item.price + '></input> $'
+		nameBox.innerHTML = ' <input type="text" style="padding: 3px;border-radius: .25rem;height: 26px;border: 1px solid rgba(0,0,0,.15);border-style: solid;color: #464a4c"></input>'
+		nameBox.querySelector('input').value = itemBox.item.name
+		priceBox.innerHTML = '<input type="text" style="padding: 3px;border-radius: .25rem;height: 26px;border: 1px solid rgba(0,0,0,.15);border-style: solid;color: #464a4c;width: 60px" value=></input> $'
+		priceBox.querySelector('input').value = String(itemBox.item.price)
 
 		itemBox.editFunctionNameButton = 'editBoxContentFinish'
 	}
