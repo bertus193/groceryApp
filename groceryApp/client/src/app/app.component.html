@@ -17,21 +17,21 @@
 
 
 
-			<div *ngFor="let item of items">
+			<div *ngFor="let itemBox of itemBoxes">
 				<ul class="list-group">
 					<li class="list-group-item clearfix">
-						<ng-template [ngTemplateOutlet]="templateForItems" [ngOutletContext]="{item:item}"></ng-template>
+						<ng-template [ngTemplateOutlet]="templateForItems" [ngOutletContext]="{itemBox:itemBox}"></ng-template>
 					</li>
 				</ul>
 			</div>
 
 
-			<div *ngIf="itemsBought.length > 0">
+			<div *ngIf="itemBoxesBought.length > 0">
 				<h3>Items bought</h3>
-				<span *ngFor="let item of itemsBought">
+				<span *ngFor="let itemBox of itemBoxesBought">
 				<ul class="list-group">
 					<li class="list-group-item clearfix" style="background-color: #ececec;">
-						<ng-template [ngTemplateOutlet]="templateForItems" [ngOutletContext]="{item:item}"></ng-template>
+						<ng-template [ngTemplateOutlet]="templateForItems" [ngOutletContext]="{itemBox:itemBox}"></ng-template>
 					</li>
 				</ul>
 				</span>
@@ -47,21 +47,37 @@
 
 <!-- Templates -->
 
-<ng-template #templateForItems let-item="item">
+<ng-template #templateForItems let-itemBox="itemBox">
+	<!--<span class="foo" [ngStyle]='{"background-color" : itemBox.item.color}'></span>-->
+	<div style="height: 26px;">
 
-	<p class="lead">
-		<!--<span class="foo" [ngStyle]='{"background-color" : item.color}'></span>-->{{item.name}} <span style="float: right;">{{item.price}}$</span></p>
+		<span [id]="itemBox.item.id + '_name'">{{itemBox.item.name}}</span>
+
+		<span style="float: right;" [id]="itemBox.item.id + '_price'">
+			{{itemBox.item.price}} $
+		</span>
+
+	</div><br>
+	<!--<span style="float: right;"><span [id]="itemBox.item.id + '_price'">{{itemBox.item.price}}</span>$</span>-->
 	<div>
 		<span class="pull-right">
-	  <button class="btn btn-default btn-xs"><span class="glyphicon glyphicon-pencil" 
-				 ng-click="editTask($index)"></span></button>
-		<span *ngIf="item.bought == false; else boughtTrueIcon">
-			<button class="btn btn-primary btn-xs" (click)="item.bought = markItemBought(item)"><span class="glyphicon glyphicon-ok"></span></button>
+		<span [id]="itemBox.item.id + '_editOK'">
+	  		<button class="btn btn-default btn-xs" (click)="this[itemBox.editFunctionNameButton](itemBox)"><span class="glyphicon glyphicon-pencil"></span></button>
+		</span>
+		<span [id]="itemBox.item.id + '_editCancel'">
+
+		</span>
+		<span [id]="itemBox.item.id + '_bought'">
+			<span *ngIf="itemBox.item.bought == false; else boughtTrueIcon">
+				<button class="btn btn-primary btn-xs" (click)="markItemBought(itemBox)"><span class="glyphicon glyphicon-ok"></span></button>
 		</span>
 		<ng-template #boughtTrueIcon>
-			<button class="btn btn-primary btn-xs" (click)="item.bought = markItemBought(item)"><span class="glyphicon glyphicon glyphicon-minus"></span></button>
+			<button class="btn btn-primary btn-xs" (click)="markItemBought(itemBox)"><span class="glyphicon glyphicon glyphicon-minus"></span></button>
 		</ng-template>
-		<button class="btn btn-danger btn-xs"><span class="glyphicon glyphicon-remove"></span></button>
+		</span>
+		<span [id]="itemBox.item.id + '_delete'">
+			<button class="btn btn-danger btn-xs"><span class="glyphicon glyphicon-remove"></span></button>
+		</span>
 		</span>
 	</div>
 </ng-template>
