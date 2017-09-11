@@ -3,10 +3,10 @@ GroceryApp
 
 Sistema similar a TODO list. Servidor-Cliente.
 
-Servidor: Node.js, LoopBack Framework.
-DB: mongoDB.
-Cliente: AngularJS 4, HTML5, Typescript.
-Cliente-Servidor: SDK (Loopback-SDK-Builder).
+**Servidor**: Node.js, LoopBack Framework.  
+**DB**: mongoDB.  
+**Cliente**: AngularJS 4, HTML5, Typescript.  
+**Cliente-Servidor**: SDK (Loopback-SDK-Builder).  
 
 ## Funcionalidades
 
@@ -31,4 +31,6 @@ Cliente-Servidor: SDK (Loopback-SDK-Builder).
 - [Instalación](https://github.com/bertus193/groceryApp/wiki/Instalaci%C3%B3n)
 
 - [Puesta en Marcha](https://github.com/bertus193/groceryApp/wiki/Puesta-en-marcha)
+
+- [Funcionalidades](https://github.com/bertus193/groceryApp/wiki/Funcionalidades)
 
