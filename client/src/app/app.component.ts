@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core'
+import { Title } from "@angular/platform-browser";
 
 import { LoopBackConfig } from './sdk'
 import { Items } from './sdk/models'
@@ -20,15 +21,14 @@ export class AppComponent implements OnInit {
 	itemBoxesBought: ItemBox[];
 	autocompleteItems: Item[];
 
-	constructor(private itemsApi: ItemsApi) {
+	constructor(private itemsApi: ItemsApi, private titleService: Title) {
 		LoopBackConfig.setBaseURL("http://127.0.0.1:3000")
 		LoopBackConfig.setApiVersion("api")
 	}
 
 
 	ngOnInit() {
-
-
+		this.titleService.setTitle('My GroceryApp');
 		this.getItems()
 		this.getItemsPriceTotal()
 		this.getItemsCount()
